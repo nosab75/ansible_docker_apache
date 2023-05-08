@@ -17,7 +17,9 @@
 
     - name: Install required system packages
       apt:
-        pkg:
+        pkg: "{{ item }}"
+        state: latest
+      loop:
           - apt-transport-https
           - ca-certificates
           - curl
@@ -25,8 +27,10 @@
           - python3-pip
           - virtualenv
           - python3-setuptools
-        state: latest
-        update_cache: true
+          - git
+          - htop
+          - net-tools
+          - lynx
 
     - name: Add Docker GPG apt Key
       apt_key:
@@ -47,6 +51,11 @@
     - name: Install Docker Module for Python
       pip:
         name: docker
+   
+    - name: Copy website file template
+      template:
+        src: index.html.j2
+        dest: /home/vagrant/index.html
 
     - name: Pull default Docker image
       community.docker.docker_image:
@@ -60,4 +69,5 @@
         state: started
         ports:
           - "{{ httpd_port }}:80"
-
+        volumes:
+          - /home/vagrant/index.html:/var/www/html/index.html

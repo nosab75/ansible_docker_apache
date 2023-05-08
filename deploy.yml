@@ -1,5 +1,5 @@
 ---
-- name: Installer Docker et exécuter une image Apache2d
+- name: Installer Docker et exécuter une image Apache2
   hosts: all
   become: true
   vars:

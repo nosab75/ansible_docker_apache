@@ -58,8 +58,6 @@
         name: "{{ default_container_name }}"
         image: "{{ default_container_image }}"
         state: started
-        exposed_ports:
-          - 80
         ports:
           - "{{ httpd_port }}:80"
 

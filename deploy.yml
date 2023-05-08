@@ -4,10 +4,9 @@
   become: true
   vars:
     ansible_sudo_pass: vagrant
-    container_count: 4
     default_container_name: apache2-test
     default_container_image: ubuntu/apache2
-    default_container_command: sleep 1d
+    httpd_port: 8080
 
   tasks:
     - name: Install aptitude
@@ -56,9 +55,11 @@
 
     - name: Create default containers
       community.docker.docker_container:
-        name: "{{ default_container_name }}{{ item }}"
+        name: "{{ default_container_name }}"
         image: "{{ default_container_image }}"
-        command: "{{ default_container_command }}"
-        state: present
-      with_sequence: count={{ container_count }}
+        state: started
+        exposed_ports:
+          - 80
+        ports:
+          - "{{ httpd_port }}:80"
 
